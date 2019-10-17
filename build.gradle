@@ -11,5 +11,3 @@ dependencies {
     implementation 'com.google.guava:guava:28.0-jre'
     testImplementation 'junit:junit:4.12'
 }
-
-mainClassName = 'com.github.korchemkin.bigtriangleseeker.Main'
