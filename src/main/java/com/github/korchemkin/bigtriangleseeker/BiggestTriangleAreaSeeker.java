@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 /**
@@ -22,6 +23,8 @@ class BiggestTriangleAreaSeeker {
      * Searching results.
      */
     private String desiredLine = "";
+    /** */
+    private static Logger logger = Logger.getLogger(BiggestTriangleAreaSeeker.class.getName());
 
     private List<Integer> convertCoords(final String[] coords) {
         return Arrays.stream(coords)
@@ -58,6 +61,12 @@ class BiggestTriangleAreaSeeker {
     private void output(final String outputFilePath) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFilePath))) {
             writer.write(desiredLine);
+
+            if (desiredLine.length() != 0) {
+                logger.info("Done! Please, check the file " + outputFilePath);
+            } else {
+                logger.info("Sorry, nothing found.");
+            }
         } catch (IOException e) {
             // TODO
             e.printStackTrace();
@@ -66,6 +75,7 @@ class BiggestTriangleAreaSeeker {
 
     void findAndOutput(final String inputFilePath, final String outputFilePath) {
         try (Stream<String> stream = Files.lines(Paths.get(inputFilePath))) {
+            logger.info("Working... Please wait.");
             final int rightCoordsLength = 6;
             stream.filter(x -> x.split(" ").length == rightCoordsLength)
                 .forEach(this::calcLine);

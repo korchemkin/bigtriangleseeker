@@ -11,7 +11,7 @@ public final class Main {
     public static void main(final String[] args) {
         if (args.length < 2) {
             System.out.println("\n\nPlease, pass paths of input and output files. "
-                + "For more info https://github.com/korchemkin/bigtriangleseeker\n\n");
+                + "\nFor more info https://github.com/korchemkin/bigtriangleseeker\n\n");
             return;
         }
 

@@ -11,3 +11,12 @@ dependencies {
     implementation 'com.google.guava:guava:28.0-jre'
     testImplementation 'junit:junit:4.12'
 }
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'com.github.korchemkin.bigtriangleseeker.Main'
+        )
+    }
+    archiveBaseName = 'seeker'
+}
