@@ -6,9 +6,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  *
  * Finds the largest triangle area by coordinates in the input file.
@@ -18,12 +20,17 @@ class BiggestTriangleAreaSeeker {
      * The largest triangle area in the input file.
      */
     private double biggestTriangleArea;
+
+    String getDesiredLine() {
+        return desiredLine;
+    }
+
     /**
      * Searching result.
      */
     private String desiredLine = "";
     /** */
-    private final static Logger logger = Logger.getLogger(BiggestTriangleAreaSeeker.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(BiggestTriangleAreaSeeker.class);
     /**
      *
      * The coordinates of the first vertex of a triangle x1, y1.
@@ -51,7 +58,7 @@ class BiggestTriangleAreaSeeker {
                 this.convertCoords(line.trim().split(" "))
         );
 
-        if (triangleArea > this.biggestTriangleArea) {
+        if (triangleArea < this.biggestTriangleArea) {
             return;
         }
 
@@ -83,30 +90,26 @@ class BiggestTriangleAreaSeeker {
         String message = "\nSorry, can't write to file. \nExit.";
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFilePath))) {
-            writer.write(desiredLine);
-
-            if (desiredLine.length() != 0) {
-                message = "Done! Please, check the file " + outputFilePath;
-            } else {
-                message = "Sorry, nothing found in input file.";
-            }
+            writer.write(this.desiredLine);
+            message = (this.desiredLine.length() > 0 ? "Done! Please, check the file " + outputFilePath
+                    : "Sorry, nothing found in input file.");
         } catch (Exception e) {
             message = e.getMessage() + message;
         } finally {
-            logger.info(message);
+            LOGGER.info(message);
         }
     }
 
     void findAndOutput(final String inputFilePath, final String outputFilePath) {
         try (Stream<String> stream = Files.lines(Paths.get(inputFilePath))) {
-            logger.info("Working... Please wait.");
+            LOGGER.info("Working... Please wait.");
 
             stream.filter(this::isCoordsCorrect)
                     .forEach(this::calcLine);
 
             this.output(outputFilePath);
         } catch (Exception e) {
-            logger.info(e.getMessage() + "\nCan't read file. Please, try again. \nExit. ");
+            LOGGER.info(e.getMessage() + "\nCan't read file. Please, try again. \nExit. ");
         }
     }
 }

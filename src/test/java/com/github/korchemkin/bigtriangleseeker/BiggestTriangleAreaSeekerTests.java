@@ -26,6 +26,15 @@ class BiggestTriangleAreaSeekerTests {
     }
 
     @Test
+    void testCalcLine() {
+        String smallTriangle = " -1 -1 8 -1 -1 8 ";
+        String bigTriangle = " -1 -1 20 -1 -1 20 ";
+        seeker.calcLine(bigTriangle);
+        seeker.calcLine(smallTriangle);
+        assertEquals(bigTriangle, seeker.getDesiredLine());
+    }
+
+    @Test
     void testIsCoordsCorrect() {
         assertAll(
                 () -> assertTrue(seeker.isCoordsCorrect("  -1 -1 20 -1 -1 20  ")),
