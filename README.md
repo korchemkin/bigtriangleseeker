@@ -6,7 +6,7 @@ The program finds the largest isosceles triangle by area.
 
 1. Build `.jar` file with gradle.
 
-2. Execute.
+2. Execute file in `bigtriangleseeker/build/libs/`
 ```
 java -jar <JAR FILE> <INPUT FILE PATH> <OUTPUT FILE PATH>
 ```
