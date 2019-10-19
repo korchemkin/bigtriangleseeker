@@ -4,10 +4,10 @@ The program finds the largest isosceles triangle by area.
 
 ## Usage
 
-1. Build `.jar` file.
+1. Build `.jar` file with gradle.
 
 2. Execute.
-```sh
+```
 java -jar <JAR FILE> <INPUT FILE PATH> <OUTPUT FILE PATH>
 ```
 
