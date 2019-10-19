@@ -27,3 +27,6 @@ Data
 written in a line as 6 consecutive integers, separated by a space
 (each line of the file is a new set of triangle coordinates). The first 2 numbers are the coordinates
 the first point, the second - the second, etc.
+
+
+The largest coordinates of the triangle will be written to the output file.
