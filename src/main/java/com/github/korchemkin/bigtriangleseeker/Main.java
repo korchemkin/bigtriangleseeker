@@ -1,6 +1,6 @@
 package com.github.korchemkin.bigtriangleseeker;
 
-public final class Main {
+final class Main {
     private Main() { }
     /**
      *

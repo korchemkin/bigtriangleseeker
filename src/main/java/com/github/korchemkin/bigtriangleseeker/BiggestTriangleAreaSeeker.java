@@ -2,7 +2,6 @@ package com.github.korchemkin.bigtriangleseeker;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -20,17 +19,11 @@ class BiggestTriangleAreaSeeker {
      */
     private double biggestTriangleArea;
     /**
-     * Searching results.
+     * Searching result.
      */
     private String desiredLine = "";
     /** */
-    private static Logger logger = Logger.getLogger(BiggestTriangleAreaSeeker.class.getName());
-
-    private List<Integer> convertCoords(final String[] coords) {
-        return Arrays.stream(coords)
-            .map(Integer::valueOf)
-            .collect(Collectors.toList());
-    }
+    private final static Logger logger = Logger.getLogger(BiggestTriangleAreaSeeker.class.getName());
     /**
      *
      * The coordinates of the first vertex of a triangle x1, y1.
@@ -40,49 +33,80 @@ class BiggestTriangleAreaSeeker {
      * @param coords [x1, y1, x2, y2, x3, y3]
      * @return triangle area
      */
-    private double calcTriangleAreaByCoords(final List<Integer> coords) {
+    double calcTriangleAreaByCoords(final List<Integer> coords) {
         return (
             (coords.get(2) - coords.get(0)) * (coords.get(5) - coords.get(1))
             - (coords.get(4) - coords.get(0)) * (coords.get(3) - coords.get(1))
         ) / 2.0;
     }
 
-    private void calcLine(final String line) {
+    List<Integer> convertCoords(final String[] coords) {
+        return Arrays.stream(coords)
+                .map(Integer::parseInt)
+                .collect(Collectors.toList());
+    }
+
+    void calcLine(final String line) {
         double triangleArea = this.calcTriangleAreaByCoords(
-                this.convertCoords(line.split(" "))
+                this.convertCoords(line.trim().split(" "))
         );
 
         if (triangleArea > this.biggestTriangleArea) {
-            this.biggestTriangleArea = triangleArea;
-            this.desiredLine = line;
+            return;
         }
+
+        this.biggestTriangleArea = triangleArea;
+        this.desiredLine = line;
     }
 
-    private void output(final String outputFilePath) {
+    boolean isCoordsCorrect(final String line) {
+        final int rightCoordsLength = 6;
+        String[] arr = line.trim().split(" ");
+
+        if (arr.length != rightCoordsLength) {
+            return false;
+        }
+
+        try {
+            // check if coords contains NaN
+            for (String item : arr) {
+                Integer.parseInt(item);
+            }
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    void output(final String outputFilePath) {
+        String message = "\nSorry, can't write to file. \nExit.";
+
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFilePath))) {
             writer.write(desiredLine);
 
             if (desiredLine.length() != 0) {
-                logger.info("Done! Please, check the file " + outputFilePath);
+                message = "Done! Please, check the file " + outputFilePath;
             } else {
-                logger.info("Sorry, nothing found.");
+                message = "Sorry, nothing found in input file.";
             }
-        } catch (IOException e) {
-            // TODO
-            e.printStackTrace();
+        } catch (Exception e) {
+            message = e.getMessage() + message;
+        } finally {
+            logger.info(message);
         }
     }
 
     void findAndOutput(final String inputFilePath, final String outputFilePath) {
         try (Stream<String> stream = Files.lines(Paths.get(inputFilePath))) {
             logger.info("Working... Please wait.");
-            final int rightCoordsLength = 6;
-            stream.filter(x -> x.split(" ").length == rightCoordsLength)
-                .forEach(this::calcLine);
+
+            stream.filter(this::isCoordsCorrect)
+                    .forEach(this::calcLine);
+
             this.output(outputFilePath);
-        } catch (IOException e) {
-            // TODO
-            e.printStackTrace();
+        } catch (Exception e) {
+            logger.info(e.getMessage() + "\nCan't read file. Please, try again. \nExit. ");
         }
     }
 }
