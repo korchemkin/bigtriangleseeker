@@ -29,4 +29,4 @@ written in a line as 6 consecutive integers, separated by a space
 the first point, the second - the second, etc.
 
 
-The largest coordinates of the triangle will be written to the output file.
+The coordinates of the largest triangle will be written to the output file.
